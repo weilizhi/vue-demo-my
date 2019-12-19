@@ -5,8 +5,9 @@ function resolve (dir) {
 module.exports={
     lintOnSave:false,
     devServer:{
-        open:true
-    },
+        open:true,
+    
+     },
     configureWebpack:{
         resolve: {
             alias: {
