@@ -27,7 +27,7 @@
         <div class="header">
           
           <h2 class="title">购物车</h2>
-          <span class="clear">清空</span>
+          <span class="clear" @click="clear">清空</span>
         </div>
         <div class="content" ref="shopCartListContent">
           <ul>
@@ -41,7 +41,7 @@
                 <span class="price"
                   >¥{{ selectedFood.count * selectedFood.price }}</span
                 >
-                <ele-control class="control" :food="selectedFood">
+                <ele-control class="control" :food="selectedFood" @addCount='addCount' @removeCount="removeCount">
                 </ele-control>
               </div>
             </li>
@@ -49,12 +49,11 @@
         </div>
       </div>
     </transition>
-    <!-- v-show="!mask" @click="mask" -->
     <div class="mask" v-show="showList" @click="flod=true" ></div>
   </div>
 </template>
 <script>
-import control from "components/ele-control/ele-contorl.vue";
+import control from "components/ele-control/ele-control.vue";
 import BScroll from "better-scroll";
 export default {
   name: "ele-cart",
@@ -70,9 +69,9 @@ export default {
   methods: {
     flodFn(){
       if(this.totalCount <= 0){
-        return
+        return;
       }
-      return !this.fold
+      this.flod =!this.flod
     },
     clear(){
       this.$emit('clear')
@@ -110,14 +109,14 @@ export default {
     },
     showList() {
       if (this.totalCount <= 0) {
-        this.fold=true
+        this.flod=true
         return false
       }
       return !this.flod
     }
   },
   mounted() {
-    new BScroll(this.$refs.shopCartListContent);
+    new BScroll(this.$refs.shopCartListContent,{click:true});
   }
 };
 </script>
@@ -274,6 +273,8 @@ export default {
   right 0
   top 0
   bottom 0
+  width 100%
+  height 100%
   z-index 1
   background rgba(7,17,27,.6)
   backdrop-filter blur(10px)

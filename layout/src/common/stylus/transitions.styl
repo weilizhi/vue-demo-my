@@ -1,8 +1,10 @@
 .shopCartList-enter
+  opacity 0 !important
   transform translateY(100%) !important
 .shopCartList-enter-active
   transition 1s all  linear !important
 .shopCartList-enter-to
+ opacity 1 !important
   transform translateY(0) !important
 
 .shopCartList-leave
@@ -10,6 +12,7 @@
 .shopCartList-leave-active
   transition 1s all  linear !important
 .shopCartList-leave-to
+ 
   transform translateY(100%) !important
 
 .cartControlRemove-enter
