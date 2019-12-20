@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="shop-cart" >
+    <div class="shop-cart">
       <div class="left" @click="flodFn">
         <div class="shop-wrap" :class="{ highLight: totalPrice > 0 }">
           <div class="logo">
@@ -25,7 +25,6 @@
     <transition name="shopCartList">
       <div class="list" v-show="showList">
         <div class="header">
-          
           <h2 class="title">购物车</h2>
           <span class="clear" @click="clear">清空</span>
         </div>
@@ -41,7 +40,12 @@
                 <span class="price"
                   >¥{{ selectedFood.count * selectedFood.price }}</span
                 >
-                <ele-control class="control" :food="selectedFood" @addCount='addCount' @removeCount="removeCount">
+                <ele-control
+                  class="control"
+                  :food="selectedFood"
+                  @addCount="addCount"
+                  @removeCount="removeCount"
+                >
                 </ele-control>
               </div>
             </li>
@@ -49,7 +53,7 @@
         </div>
       </div>
     </transition>
-    <div class="mask" v-show="showList" @click="flod=true" ></div>
+    <div class="mask" v-show="showList" @click="flod = true"></div>
   </div>
 </template>
 <script>
@@ -63,24 +67,24 @@ export default {
     minPrice: Number
   },
   data() {
-    return { flod:true };
+    return { flod: true };
   },
   components: { "ele-control": control },
   methods: {
-    flodFn(){
-      if(this.totalCount <= 0){
+    flodFn() {
+      if (this.totalCount <= 0) {
         return;
       }
-      this.flod =!this.flod
+      this.flod = !this.flod;
     },
-    clear(){
-      this.$emit('clear')
+    clear() {
+      this.$emit("clear");
     },
-    addCount(food){
-      this.$emit('addCount',food)
+    addCount(food) {
+      this.$emit("addCount", food);
     },
-    removeCount(food){
-      this.$emit('removeCount',food)
+    removeCount(food) {
+      this.$emit("removeCount", food);
     }
   },
   computed: {
@@ -109,15 +113,23 @@ export default {
     },
     showList() {
       if (this.totalCount <= 0) {
-        this.flod=true
-        return false
+        this.flod = true;
+        return false;
       }
-      return !this.flod
+      if (!this.scroll) {
+        this.scroll = new BScroll(this.$refs.shopCartListContent, {
+          click: true
+        });
+      } else {
+        this.scroll.refresh;
+      }
+
+      return !this.flod;
     }
-  },
-  mounted() {
-    new BScroll(this.$refs.shopCartListContent,{click:true});
   }
+  // mounted() {
+
+  // }
 };
 </script>
 
