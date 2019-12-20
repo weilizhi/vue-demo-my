@@ -1,6 +1,7 @@
 export default {
   getPosition:{
-      url:"/position/40.10038,116.36867",
-      method:"get"
+      url:"/position",
+      method:"get",
+      corsUrl:'/4000'//代表当前地址是需要跨域的
   }
 }

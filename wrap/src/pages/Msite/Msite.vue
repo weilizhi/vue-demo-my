@@ -12,7 +12,7 @@
         <span class="header_login_text">登录|注册</span>
       </a>
     </header>-->
-    <HeaderTop title="昌平区北七家宏福科技园(337省道北)">
+    <HeaderTop :title="address.name">
       <router-link slot="search" to="/search" class="header_search">
         <i class="iconfont icon-sousuo"></i>
       </router-link>
@@ -309,8 +309,9 @@
 </template>
 
 <script>
-import HeaderTop from "../../components/HeaderTop/HeaderTop";
-import ShopList from '../../components/ShopList/ShopList'
+import HeaderTop from "components/HeaderTop/HeaderTop";
+import ShopList from 'components/ShopList/ShopList'
+import {mapActions,mapState} from 'vuex'
 // import Swiper from 'swiper'
 //  new Swiper('.swiper-container', {
 //     pagination: {
@@ -320,14 +321,19 @@ import ShopList from '../../components/ShopList/ShopList'
 //   })
 export default {
   name: "Msite",
+  methods:{
+    ...mapActions(['getAddress'])
+  },
   components: {
     HeaderTop,
     ShopList
   },
-  async mounted() {
-   const data= await this.$http.msite.getPosition();
-   console.log(data);
-   
+  computed:{
+    ...mapState(['address'])
+  },
+  //在声明周期钩子中调用
+  created(){
+    this.getAddress()
   }
 };
 </script>
