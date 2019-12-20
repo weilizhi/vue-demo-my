@@ -6,7 +6,7 @@ const axiosObj = axios.create({
 
 //const CrosUrl='/4000'
 axiosObj.interceptors.request.use(function (config) {
-  if(config.url==='./4000/position'){
+  if(config.url==='/4000/position'){
     config.url=`${config.url}/${config.params.latitude},${config.params.longitude}`;
     config.params={}//params中不需要带东西，置为空
   }

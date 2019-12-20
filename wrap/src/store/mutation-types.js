@@ -1,4 +1,4 @@
-const GETADDRESS='get_address'
-export default{
+ const GETADDRESS='get_address'
+ export{
   GETADDRESS
-}
+ }
