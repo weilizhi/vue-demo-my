@@ -141,6 +141,7 @@ export default {
       //以1开头的11位数字
       // return /^1\d{10}$/.test(this.phone);
     },
+    //销毁定时器，以免影响每次点击倒计时的时间累加
     destroyed() {
       clearInterval(this.timer);
     }
@@ -240,7 +241,6 @@ export default {
               &.on
                 background #02a774
               >.switch_circle
-              //transform translateX(27px)
                 position absolute
                 top -1px
                 left -1px
@@ -251,6 +251,8 @@ export default {
                 background #fff
                 box-shadow 0 2px 4px 0 rgba(0,0,0,.1)
                 transition transform .3s
+                &.right
+                  transform translateX(27px)
           .login_hint
             margin-top 12px
             color #999
