@@ -5,7 +5,8 @@ export default (axiosInstance, interfaceObj) => {
       url,
       method,
       isForm,
-      corsUrl
+      corsUrl,
+      needToken
     } = interfaceObj[name];
 
     api[name] = async (data, config = {}) => {
@@ -33,7 +34,9 @@ export default (axiosInstance, interfaceObj) => {
           res = await axiosInstance({
             url,
             method,
-            params: transformData
+            params: transformData,
+            headers:{needToken},
+            
           });
           break;
         case "post":
@@ -51,7 +54,9 @@ export default (axiosInstance, interfaceObj) => {
           res = await axiosInstance({
             url,
             method,
-            data: endData
+            data: endData,
+            headers:{needToken},
+            
           })
           break;
       }

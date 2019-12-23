@@ -8,13 +8,19 @@
 
 <script>
   import FooterGuide from './components/FooterGuide/FooterGuide.vue'
+  import {mapActions} from 'vuex'
   //import {mapState} from 'vuex'
   export default {
     name: 'app',
+    methods:{
+...mapActions(['autoLogin'])
+    },
   components:{
     FooterGuide
   },
-  
+  created(){
+    this.autoLogin()
+  }
   }
 </script>
 

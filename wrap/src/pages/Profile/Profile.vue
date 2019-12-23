@@ -7,17 +7,21 @@
     </header>-->
     <HeaderTop title="我的" />
     <section class="profile-number">
-      <router-link to="/login" class="profile-link">
+      <router-link :to="user._id?`/UserDetail`:`/Login`" class="profile-link">
         <div class="profile_image">
           <i class="iconfont icon-person"></i>
         </div>
         <div class="user-info">
-          <p class="user-info-top">登录/注册</p>
-          <p>
+          <p v-show="!user.phone" class="user-info-top">
+            {{ user.name ? user.name : `登录/注册` }}
+          </p>
+          <p v-show="!user.name">
             <span class="user-icon">
               <i class="iconfont icon-shouji icon-mobile"></i>
             </span>
-            <span class="icon-mobile-number">暂无绑定手机号</span>
+            <span class="icon-mobile-number">{{
+              user.phone ? user.phone : `暂无绑定手机号`
+            }}</span>
           </p>
         </div>
         <span class="arrow">
@@ -28,21 +32,15 @@
     <section class="profile_info_data border-1px">
       <ul class="info_data_list">
         <a href="javascript:" class="info_data_link">
-          <span class="info_data_top">
-            <span>0.00</span>元
-          </span>
+          <span class="info_data_top"> <span>0.00</span>元 </span>
           <span class="info_data_bottom">我的余额</span>
         </a>
         <a href="javascript:" class="info_data_link">
-          <span class="info_data_top">
-            <span>0</span>个
-          </span>
+          <span class="info_data_top"> <span>0</span>个 </span>
           <span class="info_data_bottom">我的优惠</span>
         </a>
         <a href="javascript:" class="info_data_link">
-          <span class="info_data_top">
-            <span>0</span>分
-          </span>
+          <span class="info_data_top"> <span>0</span>分 </span>
           <span class="info_data_bottom">我的积分</span>
         </a>
       </ul>
@@ -103,11 +101,17 @@
 </template>
 
 <script>
-import HeaderTop from "../../components/HeaderTop/HeaderTop.vue";
+import HeaderTop from "components/HeaderTop/HeaderTop.vue";
+import UserDetail from "pages/userDetail/userDetail.vue";
+import { mapState } from "vuex";
 export default {
   name: "Profile",
   components: {
-    HeaderTop
+    HeaderTop,
+    UserDetail
+  },
+  computed: {
+    ...mapState(["user"])
   }
 };
 </script>
@@ -127,7 +131,7 @@ export default {
     width 100%
     height 45px
 
-    .header_search 
+    .header_search
       position absolute
       left 15px
       top 50%
@@ -135,13 +139,13 @@ export default {
       width 10%
       height 50%
 
-      .iconfont 
+      .iconfont
         font-size 22px
         color #fff
-      
-    
 
-    .header_title 
+
+
+    .header_title
       position absolute
       top 50%
       left 50%
@@ -150,20 +154,20 @@ export default {
       color #fff
       font-size 22px
       text-align center
-    
-  
 
-  .profile-number 
+
+
+  .profile-number
     margin-top 45.5px
 
-    .profile-link 
+    .profile-link
       clearFix()
       position relative
       display block
       background #02a774
       padding 20px 10px
 
-      .profile_image 
+      .profile_image
         float left
         width 60px
         height 60px
@@ -171,160 +175,160 @@ export default {
         overflow hidden
         vertical-align top
 
-        .icon-person 
+        .icon-person
           background #e4e4e4
           font-size 62px
-      
-      
 
-      .user-info 
+
+
+      .user-info
         float left
         margin-top 8px
         margin-left 15px
 
-        p 
+        p
           font-weight 700
           font-size 18px
           color #fff
 
-          &.user-info-top 
+          &.user-info-top
             padding-bottom 8px
-          
 
-          .user-icon 
+
+          .user-icon
             display inline-block
             margin-left -15px
             margin-right 15px
             width 20px
             height 20px
 
-            .icon-mobile 
+            .icon-mobile
               font-size 30px
               vertical-align text-top
-            
-          
 
-          .icon-mobile-number 
+
+
+          .icon-mobile-number
             font-size 14px
             color #fff
-          
-        
-      
 
-      .arrow 
+
+
+
+      .arrow
         width 12px
         height 12px
         position absolute
         right 15px
         top 40%
 
-        .icon-jiantou1 
+        .icon-jiantou1
           color #fff
           font-size 5px
-        
-      
-    
-  
 
-  .profile_info_data 
+
+
+
+
+  .profile_info_data
     bottom-border-1px(#e4e4e4)
     width 100%
     background #fff
     overflow hidden
 
-    .info_data_list 
+    .info_data_list
       clearFix()
 
-      .info_data_link 
+      .info_data_link
         float left
         width 33%
         text-align center
         border-right 1px solid #f1f1f1
 
-        .info_data_top 
+        .info_data_top
           display block
           width 100%
           font-size 14px
           color #333
           padding 15px 5px 10px
 
-          span 
+          span
             display inline-block
             font-size 30px
             color #f90
             font-weight 700
             line-height 30px
-          
-        
 
-        .info_data_bottom 
+
+
+        .info_data_bottom
           display inline-block
           font-size 14px
           color #666
           font-weight 400
           padding-bottom 10px
-        
-      
 
-      .info_data_link nth-of-type(2) 
-        .info_data_top 
-          span 
+
+
+      .info_data_link nth-of-type(2)
+        .info_data_top
+          span
             color #ff5f3e
-          
-        
-      
 
-      .info_data_link:nth-of-type(3) 
+
+
+
+      .info_data_link:nth-of-type(3)
         border 0
 
-        .info_data_top 
-          span 
+        .info_data_top
+          span
             color #6ac20b
-          
-        
-      
-    
-  
 
-  .profile_my_order 
+
+
+
+
+
+  .profile_my_order
     top-border-1px(#e4e4e4)
     margin-top 10px
     background #fff
 
-    .my_order 
+    .my_order
       display flex
       align-items center
       padding-left 15px
 
-      >span 
+      >span
         display flex
         align-items center
         width 20px
         height 20px
 
-        >.iconfont 
+        >.iconfont
           margin-left -10px
           font-size 30px
-        
 
-        .icon-order-s 
+
+        .icon-order-s
           color #02a774
-        
 
-        .icon-jifen 
+
+        .icon-jifen
           color #ff5f3e
-        
+
 
         .icon-vip {
           color: #f90;
         }
 
-        .icon-fuwu 
+        .icon-fuwu
           color #02a774
-        
-      
 
-      .my_order_div 
+
+
+      .my_order_div
         width 100%
         border-bottom 1px solid #f1f1f1
         padding 18px 10px 18px 0
@@ -333,16 +337,16 @@ export default {
         display flex
         justify-content space-between
 
-        span 
+        span
           display inline-block
-        
 
-        .my_order_icon 
+
+        .my_order_icon
           float right
           width 10px
           height 10px
 
-          .icon-jiantou1 
+          .icon-jiantou1
             color #bbb
             font-size 10px
 </style>
