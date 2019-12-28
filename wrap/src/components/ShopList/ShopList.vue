@@ -1,26 +1,43 @@
 <template>
   <div class="shop_container">
     <ul class="shop_list">
-      <li class="shop_li border-1px" v-for='shop in shops' :key='shop.id' >
+      <li class="shop_li border-1px" v-for="shop in shops" :key="shop.id">
         <a>
           <div class="shop_left">
-            <img class="shop_img" :src="baseImgUrl+shop.image_path" />
+            <img class="shop_img" :src="baseImgUrl + shop.image_path" />
           </div>
           <div class="shop_right">
             <section class="shop_detail_header">
-              <h4 class="shop_title">{{shop.name}}</h4>
+              <h4 class="shop_title">{{ shop.name }}</h4>
               <ul class="shop_detail_ul">
-                <li class="supports" v-for="support in shop.supports" :key='support.id'>{{support.icon_name}}</li>
+                <li
+                  class="supports"
+                  v-for="support in shop.supports"
+                  :key="support.id"
+                >
+                  {{ support.icon_name }}
+                </li>
               </ul>
             </section>
             <section class="shop_rating_order">
               <section class="shop_rating_order_left">
-                <stars size="24" :score="shop.rating" :marginR='3' class="stars"></stars>
-                <div class="rating_section">{{shop.rating}}</div>
-                <div class="order_section">月售{{shop.recent_order_num}}单</div>
+                <stars
+                  size="24"
+                  :score="shop.rating"
+                  :marginR="3"
+                  class="stars"
+                ></stars>
+                <div class="rating_section">{{ shop.rating }}</div>
+                <div class="order_section">
+                  月售{{ shop.recent_order_num }}单
+                </div>
               </section>
               <section class="shop_rating_order_right">
-                <span class="delivery_style delivery_left" v-if="shop.delivery_mode">{{shop.delivery_mode.text}}</span>
+                <span
+                  class="delivery_style delivery_left"
+                  v-if="shop.delivery_mode"
+                  >{{ shop.delivery_mode.text }}</span
+                >
                 <span class="delivery_style delivery_right">准时达</span>
               </section>
             </section>
@@ -33,30 +50,33 @@
             </section>
           </div>
         </a>
-      </li>     
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
 //引入辅助函数
-import {mapAction, mapActions, mapState} from 'vuex'
-import stars from '@/components/ele-stars/ele-stars.vue'
+import { mapAction, mapActions, mapState } from "vuex";
+import stars from "@/components/ele-stars/ele-stars.vue";
 export default {
-  name: 'ShopList',
-  components:{
+  name: "ShopList",
+  components: {
     stars
   },
-  methods:{
-    ...mapActions(['getShops'])
+  methods: {
+    ...mapActions(["getShops"])
   },
-  computed:{
-    ...mapState(['shops','baseImgUrl'])
+  computed: {
+    //...mapState(['shops','baseImgUrl'])
+    ...mapState({
+      shops: state => state.Msite.shops,
+      baseImgUrl: state => state.Msite.baseImgUrl,
+    })
   },
-  mounted(){
-    this.getShops()
-  },
-  
+  mounted() {
+    this.getShops();
+  }
 };
 </script>
 

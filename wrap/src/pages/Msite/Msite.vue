@@ -15,8 +15,8 @@
         <div class="swiper-wrapper">
           <div
             class="swiper-slide"
-            v-for="(categoryItem, Iindex) in categoryArray"
-            :key="Iindex"
+            v-for="(categoryItem, Index) in categoryArray"
+            :key="Index"
           >
             <a
               href="javascript:"
@@ -57,6 +57,7 @@ export default {
   name: "Msite",
   methods: {
     ...mapActions(["getAddress", "getCategories"]),
+
     swiperRender() {
       new Swiper(".swiper-container", {
         autoplay: true,
@@ -71,12 +72,16 @@ export default {
     ShopList
   },
   computed: {
-    ...mapState(["address", "categories", "baseImgUrl"]),
+    // ...mapState(["address", "categories", "baseImgUrl"]),
+    ...mapState(
+      { address: state => state.Msite.address,
+       categories: state => state.Msite. categories,
+       baseImgUrl: state => state.Msite.baseImgUrl}),
     categoryArray() {
       return _.chunk(this.categories, 8);
     }
   },
-  //在声明周期钩子中调用
+  //在生命周期钩子中调用
   async created() {
     this.getAddress();
     await this.getCategories(this.swiperRender);
