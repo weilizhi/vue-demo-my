@@ -5,16 +5,16 @@
         <h3 class="section-title">配送信息</h3>
         <div class="delivery">
           <div>
-            <span class="delivery-icon">硅谷专送</span>
-            <span>由商家配送提供配送，约30分钟送达，距离100m</span>
+            <span class="delivery-icon">{{seller.description}}</span>
+            <span>由商家配送提供配送，约{{seller.deliveryTime}}分钟送达，距离{{seller.distance}}m</span>
           </div>
-          <div class="delivery-money">配送费￥3</div>
+          <div class="delivery-money">配送费￥{{seller.deliveryPrice}}</div>
         </div>
       </section>
-      <div class="split"></div>
+      <ele-split ></ele-split>
       <section class="section">
         <h3 class="section-title">活动与服务</h3>
-        <div class="activity">
+        <!-- <div class="activity">
           <div class="activity-item activity-green">
             <span class="content-tag">
               <span class="mini-tag">首单</span>
@@ -33,49 +33,41 @@
             </span>
             <span class="activity-content">【立减19.5元】欢乐小食餐</span>
           </div>
-        </div>
+        </div> -->
+        <ele-list :supports='seller.supports' :color="`black`"></ele-list>
       </section>
-      <div class="split"></div>
+      <ele-split></ele-split>
 
       <section class="section">
         <h3 class="section-title">商家实景</h3>
         <div class="pic-wrapper">
           <ul class="pic-list">
-            <li class="pic-item">
-              <img width="120" height="90" src="https://fuss10.elemecdn.com/f/7f/d1422ec824a0a9d1fb879c57ab533jpeg.jpeg">
-            </li>
-            <li class="pic-item">
-              <img width="120" height="90" src="https://fuss10.elemecdn.com/f/7f/d1422ec824a0a9d1fb879c57ab533jpeg.jpeg">
-            </li>
-            <li class="pic-item">
-              <img width="120" height="90" src="https://fuss10.elemecdn.com/f/7f/d1422ec824a0a9d1fb879c57ab533jpeg.jpeg">
-            </li>
-            <li class="pic-item">
-              <img width="120" height="90" src="https://fuss10.elemecdn.com/f/7f/d1422ec824a0a9d1fb879c57ab533jpeg.jpeg">
+            <li class="pic-item" v-for="(pic,picIndex) in seller.pics" :key="picIndex">
+              <img width="120" height="90" :src="pic">
             </li>
           </ul>
         </div>
       </section>
-      <div class="split"></div>
+      <ele-split></ele-split>
 
       <section class="section">
         <h3 class="section-title">商家信息</h3>
         <ul class="detail">
           <li>
             <span class="bold">品类</span>
-            <span>包子粥店, 简餐</span>
+            <span>{{seller.categroy}}</span>
           </li>
           <li>
             <span class="bold">商家电话</span>
-            <span>18501081111</span>
+            <span>{{seller.phone}}</span>
           </li>
           <li>
             <span class="bold">地址</span>
-            <span>北京市昌平区回龙观44号</span>
+            <span>{{seller.address}}</span>
           </li>
           <li>
             <span class="bold">营业时间</span>
-            <span>09:35-21:00</span>
+            <span>{{seller.workTime}}</span>
           </li>
         </ul>
       </section>
@@ -84,8 +76,20 @@
 </template>
 
 <script>
+import list from 'components/ele-header/ele-list/ele-list'
+import BScroll from 'better-scroll'
     export default {
-        name: "ele-sellers"
+        name: "ele-sellers",
+        props:{
+          seller:Object
+        },
+        components:{
+          'ele-list':list
+        },
+        mounted(){
+new BScroll(".shop-info",{click:true}),
+new BScroll(".pic-wrapper",{click:true,scrollX:true})
+        }
     }
 </script>
 
@@ -94,7 +98,7 @@
 
   .shop-info
     position: absolute
-    top: 225px
+    top: 175px
     bottom: 0
     left: 0
     width: 100%
@@ -174,6 +178,7 @@
         white-space: nowrap
         margin-top 16px
         .pic-list
+          display inline-block
           font-size: 0
           .pic-item
             display: inline-block

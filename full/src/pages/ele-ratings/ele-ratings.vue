@@ -3,53 +3,76 @@
     <div class="ratings-content">
       <div class="overview">
         <div class="overview-left">
-          <h1 class="score">4.5</h1>
+          <h1 class="score">{{ seller.score }}</h1>
           <div class="title">综合评分</div>
-          <div class="rank">高于周边商家90%</div>
+          <div class="rank">高于周边商家{{ seller.rankRate }}%</div>
         </div>
         <div class="overview-right">
           <div class="score-wrapper">
             <span class="title">服务态度</span>
-            <div>Star组件</div>
-            <span class="score">4.4</span>
+            <ele-stars
+              class="stars"
+              :marginR="3"
+              size="36"
+              :score="seller.serviceScore"
+            ></ele-stars>
+            <span class="score">{{ seller.serviceScore }}</span>
           </div>
           <div class="score-wrapper">
             <span class="title">商品评分</span>
-            <div>Star组件</div>
-            <span class="score">4.6</span>
+            <ele-stars
+              class="stars"
+              :marginR="3"
+              size="36"
+              :score="seller.foodScore"
+            ></ele-stars>
+            <span class="score">{{ seller.foodScore }}</span>
           </div>
           <div class="delivery-wrapper">
             <span class="title">送达时间</span>
-            <span class="delivery">30分钟</span>
+            <span class="delivery">{{ seller.deliveryTime }}分钟</span>
           </div>
         </div>
       </div>
-
-      <div class="split"></div>
-
-      <div>RatingSelect组件</div>
-
+      <ele-split></ele-split>
+      <ele-select :selectType="selectType" :onlyText='onlyText' @select="select"  :ratings='ratings' :switchText='switchText'></ele-select>
       <div class="rating-wrapper">
         <ul>
-          <li class="rating-item">
+          <li
+            class="rating-item"
+            v-for="(rating, Rindex) in filterRatings"
+            :key="Rindex"
+          >
             <div class="avatar">
-              <img
-                width="28"
-                height="28"
-                src="http://static.galileo.xiaojukeji.com/static/tms/default_header.png"
-              />
+              <img width="28" height="28" :src="rating.avatar" />
             </div>
             <div class="content">
-              <h1 class="name">xxx</h1>
+              <h1 class="name">{{ rating.username }}</h1>
               <div class="star-wrapper">
-                <div>Star组件</div>
-                <span class="delivery">30</span>
+                <ele-stars
+                  size="24"
+                  :score="rating.score"
+                  :marginR="3"
+                ></ele-stars>
+                <span class="delivery">{{ rating.deliveryTime }}</span>
               </div>
-              <p class="text">还可以</p>
+              <p class="text">{{ rating.text }}</p>
               <div class="recommend">
-                <span class="iconfont icon-thumb_up"></span>
+                <span
+                  class="iconfont icon-thumb_up"
+                  :class="
+                    rating.rateType === 0 ? `icon-thumb_up` : `icon-thumb_down`
+                  "
+                ></span>
+                <span
+                  class="item"
+                  v-for="(item, itemIndex) in rating.recommend"
+                  :key="itemIndex"
+                >
+                  {{ item }}
+                </span>
               </div>
-              <div class="time">2016-12-11 12:02:13</div>
+              <div class="time">{{ rating.rateTime | dateString }}</div>
             </div>
           </li>
         </ul>
@@ -57,30 +80,62 @@
     </div>
   </div>
 </template>
+
 <script>
-const OK= 0;
+const OK = 0;
+import stars from "components/ele-stars/ele-stars";
+import select from "components/ele-select/ele-select";
+import BScroll from "better-scroll";
 export default {
   name: "ele-ratings",
+  props: { seller: Object },
   data() {
     return {
-        ratings:[]
-    };   
+      ratings: [],
+      selectType: 0, //0 ：代表推荐，1： 代表吐槽 2 ：代表全部
+      onlyText: true // true:只看有内容的  false：看全部
+    };
   },
-  async mounted(){
-     const data= await this.$http.ratings.getRatings()
-     if(data.errno===OK){
-     this.ratings=data.body
-     }
+  computed: {
+    //定义数组,获取返回值，评论数据跟返回值有关
+    filterRatings() {
+      //过滤
+      return  this.ratings.filter((rating)=>{
+        return this.selectType===2 ||rating.rateType===this.selectType && (!this.onlyText||rating.text.length>0)
+        
+      })
+    }
+  },
+  methods:{
+    select(type){
+      this.selectType=type;  
+    },
+     switchText(){
+                this.onlyText = !this.onlyText
+            }
+  },
+  components: {
+    "ele-stars": stars,
+    "ele-select": select
+  },
+  async mounted() {
+    const data = await this.$http.ratings.getRatings();
+    if (data.errno === OK) {
+      this.ratings = data.body;
+      //数据加载完毕可以滑动
+      this.$nextTick(() => {
+        new BScroll(".ratings", { click: true });
+      });
+    }
   }
 };
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus" scoped>
 @import '../../common/stylus/mixins.styl';
-
 .ratings {
   position: absolute;
-  top: 225px;
+  top: 175px;
   bottom: 0;
   left: 0;
   width: 100%;
@@ -144,10 +199,8 @@ export default {
           color: rgb(7, 17, 27);
         }
 
-        .star {
-          display: inline-block;
+        .stars {
           margin: 0 12px;
-          vertical-align: top;
         }
 
         .score {
@@ -181,10 +234,9 @@ export default {
     padding: 0 18px;
 
     .rating-item {
+      bottom-border-1px(rgba(7, 17, 27, 0.1));
       display: flex;
       padding: 18px 0;
-      bottom-border-1px(rgba(7, 17, 27, 0.1));
-
       .avatar {
         flex: 0 0 28px;
         width: 28px;
@@ -272,5 +324,3 @@ export default {
   }
 }
 </style>
-
-
